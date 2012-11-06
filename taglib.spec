@@ -19,7 +19,7 @@ Group: 	    System Environment/Libraries
 License:    LGPLv2
 #URL:       http://developer.kde.org/~wheeler/taglib.html
 URL:        http://launchpad.net/taglib
-Source0:    https://github.com/downloads/taglib/taglib/taglib-%{version}%{?pre}.tar.gz
+Source0:    https://github.com/downloads/taglib/taglib/taglib-%{version}.tar.gz
 #Source0:   taglib-%{svn}.tar.gz
 # The svn tarball is generated with the following script
 Source1:    taglib-svn.sh
@@ -157,6 +157,7 @@ rm -rf %{buildroot}
 %changelog
 * Mon Nov  5 2012 Ivan Romanov <drizt@land.ru> - 1.8-2.R
 - added librcc patch
+- corrected source path
 
 * Thu Sep 13 2012 Rex Dieter <rdieter@fedoraproject.org> 1.8-2
 - taglib.h: fix TAGLIB_MINOR_VERSION
