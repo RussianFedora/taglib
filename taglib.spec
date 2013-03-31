@@ -3,12 +3,12 @@
 %bcond_without doc
 %global apidocdir __api-doc_fedora
 
-%define snap 20130218git
+%define snap 20121215git
 
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.8
-Release:    5.%{snap}%{?dist}
+Release:    3.%{snap}%{?dist}
 
 License:    LGPLv2
 #URL:       http://launchpad.net/taglib
@@ -131,15 +131,9 @@ test "$(pkg-config --modversion taglib_c)" = "%{version}.0"
 
 
 %changelog
-* Sun Mar 31 2013 Ivan Romanov <drizt@land.ru> - 1.8-5.20130218git.R
-- applyed russxmms patch
+* Sun Mar 31 2013 Ivan Romanov <drizt@land.ru> - 1.8-3.20121215git%{?dist}
+- applyed rusxmms patch
 - disabled tests
-
-* Mon Feb 18 2013 Rex Dieter <rdieter@fedoraproject.org> 1.8-5.20130218git
-- 20120218git snapshot
-
-* Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-4.20121215git
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
 * Sat Dec 15 2012 Rex Dieter <rdieter@fedoraproject.org> 1.8-3.20121215git
 - 20121215git snapshot
