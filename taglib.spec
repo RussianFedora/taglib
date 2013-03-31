@@ -1,40 +1,32 @@
 
-# Fedora cvs admin requests for taglib: http://bugzilla.redhat.com/418271
-
 %bcond_without tests
-
-%if %{with tests}
-%global buildtests -DBUILD_TESTS=ON
-%endif
-
 %bcond_without doc
 %global apidocdir __api-doc_fedora
 
-Name:       taglib	
-Version:    1.8
-Release:    2%{?dist}
-Summary:    Audio Meta-Data Library
+%define snap 20130218git
 
-Group: 	    System Environment/Libraries
+Name:       taglib	
+Summary:    Audio Meta-Data Library
+Version:    1.8
+Release:    5.%{snap}%{?dist}
+
 License:    LGPLv2
-#URL:       http://developer.kde.org/~wheeler/taglib.html
-URL:        http://launchpad.net/taglib
-Source0:    https://github.com/downloads/taglib/taglib/taglib-%{version}.tar.gz
-#Source0:   taglib-%{svn}.tar.gz
-# The svn tarball is generated with the following script
-Source1:    taglib-svn.sh
-BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+#URL:       http://launchpad.net/taglib
+URL:        http://taglib.github.com/
+%if 0%{?snap:1}
+Source0:    taglib-%{version}-%{snap}.tar.gz
+%else
+Source0:    https://github.com/downloads/taglib/taglib/taglib-%{version}%{?pre}.tar.gz
+%endif
+# The snapshot tarballs generated with the following script:
+Source1:    taglib-snapshot.sh
 
 # http://bugzilla.redhat.com/343241
 # try 1, use pkg-config
 Patch1:     taglib-1.5b1-multilib.patch 
 # try 2, kiss omit -L%_libdir
 Patch2:     taglib-1.5rc1-multilib.patch
-
-Patch3:     %{name}-1.8-librcc.patch
-
-## upstreamable patches
-Patch50: taglib-1.8-version.patch
+Patch3:     taglib-1.8-ds-rusxmms-r2.patch
 
 BuildRequires: cmake
 BuildRequires: pkgconfig
@@ -54,26 +46,18 @@ popular audio formats. Currently it supports both ID3v1 and ID3v2 for MP3
 files, Ogg Vorbis comments and ID3 tags and Vorbis comments in FLAC, MPC,
 Speex, WavPack, TrueAudio files, as well as APE Tags.
 
-%if %{with doc}
 %package doc
 Summary: API Documentation for %{name}
-Group: Documentation
-%if 0%{?fedora} > 9 || 0%{?rhel} > 5
 BuildArch: noarch
-%endif
 %description doc
 This is API documentation generated from the TagLib source code.
-%endif
 
 %package devel
 Summary: Development files for %{name} 
-Group:	 Development/Libraries
-Requires: %{name} = %{version}-%{release}
-Requires: pkgconfig
+Requires: %{name}%{?_isa} = %{version}-%{release}
 %if ! %{with doc}
 Obsoletes: %{name}-doc
 %endif
-
 %description devel
 Files needed when building software with %{name}.
 
@@ -84,17 +68,13 @@ Files needed when building software with %{name}.
 # patch1 not applied
 ## omit for now
 %patch2 -p1 -b .multilib
-
 %patch3 -p1
-
-%patch50 -p1 -b .version
-
 
 %build
 mkdir -p %{_target_platform}
 pushd %{_target_platform}
 %{cmake} \
-  %{?buildtests} \
+  %{?with_tests:-DBUILD_TESTS:BOOL=ON} \
   ..
 popd
 
@@ -106,8 +86,6 @@ make docs -C %{_target_platform}
 
 
 %install
-rm -rf %{buildroot}
-
 make install/fast DESTDIR=%{buildroot} -C %{_target_platform}
 
 %if %{with doc}
@@ -117,28 +95,27 @@ ln -s html/index.html %{apidocdir}
 find %{apidocdir} -name '*.md5' | xargs rm -fv
 %endif
 
-# %if %{with tests}
-# %check
-# ln -s ../../tests/data %{_target_platform}/tests/
-# LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH make check -C %{_target_platform}
-# %endif
 
-
-%clean
-rm -rf %{buildroot}
+%check
+export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
+test "$(pkg-config --modversion taglib)" = "%{version}.0"
+test "$(pkg-config --modversion taglib_c)" = "%{version}.0"
+%if %{with tests}
+#ln -s ../../tests/data %{_target_platform}/tests/
+#LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH \
+#make check -C %{_target_platform}
+%endif
 
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS COPYING.LGPL NEWS
 %{_libdir}/libtag.so.1*
 %{_libdir}/libtag_c.so.0*
 
 %files devel
-%defattr(-,root,root,-)
 %doc examples
 %{_bindir}/taglib-config
 %{_includedir}/taglib/
@@ -149,15 +126,24 @@ rm -rf %{buildroot}
 
 %if %{with doc}
 %files doc
-%defattr(-,root,root,-)
 %doc %{apidocdir}/*
 %endif
 
 
 %changelog
-* Mon Nov  5 2012 Ivan Romanov <drizt@land.ru> - 1.8-2.R
-- added librcc patch
-- corrected source path
+* Sun Mar 31 2013 Ivan Romanov <drizt@land.ru> - 1.8-5.20130218git.R
+- applyed russxmms patch
+- disabled tests
+
+* Mon Feb 18 2013 Rex Dieter <rdieter@fedoraproject.org> 1.8-5.20130218git
+- 20120218git snapshot
+
+* Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-4.20121215git
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Sat Dec 15 2012 Rex Dieter <rdieter@fedoraproject.org> 1.8-3.20121215git
+- 20121215git snapshot
+- .spec cleanup
 
 * Thu Sep 13 2012 Rex Dieter <rdieter@fedoraproject.org> 1.8-2
 - taglib.h: fix TAGLIB_MINOR_VERSION
