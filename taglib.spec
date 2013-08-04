@@ -8,7 +8,7 @@
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.8
-Release:    5.%{snap}%{?dist}
+Release:    6.%{snap}%{?dist}
 
 License:    LGPLv2
 #URL:       http://launchpad.net/taglib
@@ -131,9 +131,12 @@ test "$(pkg-config --modversion taglib_c)" = "%{version}.0"
 
 
 %changelog
-* Sun Mar 31 2013 Ivan Romanov <drizt@land.ru> - 1.8-5.20130218git.R
+* Sun Aug 04 2013 Ivan Romanov <drizt@land.ru> - 1.8-6.20130218git.R
 - applyed russxmms patch
 - disabled tests
+
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-6.20130218git
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
 * Mon Feb 18 2013 Rex Dieter <rdieter@fedoraproject.org> 1.8-5.20130218git
 - 20120218git snapshot
