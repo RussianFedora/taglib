@@ -1,22 +1,20 @@
 
-%bcond_without tests
-%bcond_without doc
+%bcond_with tests
+#bcond_without doc
 %global apidocdir __api-doc_fedora
-
-%define snap 20121215git
 
 Name:       taglib	
 Summary:    Audio Meta-Data Library
-Version:    1.8
-Release:    3.%{snap}%{?dist}
+Version:    1.9.1
+Release:    1%{?dist}
 
-License:    LGPLv2
+License:    LGPLv2 and MPL
 #URL:       http://launchpad.net/taglib
 URL:        http://taglib.github.com/
 %if 0%{?snap:1}
 Source0:    taglib-%{version}-%{snap}.tar.gz
 %else
-Source0:    https://github.com/downloads/taglib/taglib/taglib-%{version}%{?pre}.tar.gz
+Source0:    http://taglib.github.io/releases/taglib-%{version}.tar.gz
 %endif
 # The snapshot tarballs generated with the following script:
 Source1:    taglib-snapshot.sh
@@ -26,7 +24,7 @@ Source1:    taglib-snapshot.sh
 Patch1:     taglib-1.5b1-multilib.patch 
 # try 2, kiss omit -L%_libdir
 Patch2:     taglib-1.5rc1-multilib.patch
-Patch3:     taglib-1.8-ds-rusxmms-r2.patch
+Patch100:     taglib-1.9.1-ds-rusxmms-r9.patch
 
 BuildRequires: cmake
 BuildRequires: pkgconfig
@@ -68,7 +66,8 @@ Files needed when building software with %{name}.
 # patch1 not applied
 ## omit for now
 %patch2 -p1 -b .multilib
-%patch3 -p1
+%patch100 -p1
+
 
 %build
 mkdir -p %{_target_platform}
@@ -98,12 +97,12 @@ find %{apidocdir} -name '*.md5' | xargs rm -fv
 
 %check
 export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
-test "$(pkg-config --modversion taglib)" = "%{version}.0"
-test "$(pkg-config --modversion taglib_c)" = "%{version}.0"
+test "$(pkg-config --modversion taglib)" = "%{version}"
+test "$(pkg-config --modversion taglib_c)" = "%{version}"
 %if %{with tests}
 #ln -s ../../tests/data %{_target_platform}/tests/
 #LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH \
-#make check -C %{_target_platform}
+make check -C %{_target_platform}
 %endif
 
 
@@ -111,7 +110,8 @@ test "$(pkg-config --modversion taglib_c)" = "%{version}.0"
 %postun -p /sbin/ldconfig
 
 %files
-%doc AUTHORS COPYING.LGPL NEWS
+%doc AUTHORS NEWS
+%doc COPYING.LGPL COPYING.MPL
 %{_libdir}/libtag.so.1*
 %{_libdir}/libtag_c.so.0*
 
@@ -131,9 +131,27 @@ test "$(pkg-config --modversion taglib_c)" = "%{version}.0"
 
 
 %changelog
-* Sun Mar 31 2013 Ivan Romanov <drizt@land.ru> - 1.8-3.20121215git%{?dist}
-- applyed rusxmms patch
+* Fri Nov  8 2013 Ivan Romanov <drizt@land.ru> - 1.9.1-1.R
+- applyed russxmms patch
 - disabled tests
+
+* Tue Oct 08 2013 Rex Dieter <rdieter@fedoraproject.org> 1.9.1-1
+- taglib-1.9.1
+
+* Tue Oct 08 2013 Rex Dieter <rdieter@fedoraproject.org> 1.9-2
+- License: +MPL
+
+* Sun Oct 06 2013 Rex Dieter <rdieter@fedoraproject.org> 1.9-1
+- taglib-1.9
+
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-6.20130218git
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+* Mon Feb 18 2013 Rex Dieter <rdieter@fedoraproject.org> 1.8-5.20130218git
+- 20120218git snapshot
+
+* Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-4.20121215git
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
 * Sat Dec 15 2012 Rex Dieter <rdieter@fedoraproject.org> 1.8-3.20121215git
 - 20121215git snapshot
