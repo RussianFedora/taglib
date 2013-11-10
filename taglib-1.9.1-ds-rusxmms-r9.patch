@@ -541,7 +541,7 @@ index 75a9833..fddcfaf 100644
 +      std::string s = to8Bit(true);
 +      if (t == Latin1ID3) v = rccTaglibPatchRecodeOutputID3(s, false);
 +      else if (t == Latin1ID3V2) v = rccTaglibPatchRecodeOutputID3(s, true);
-+      if (v.size()) break;
++      if (v.size()) return v;
 +      
 +          // we don't know if we got NULL because rcc is disabled (error) or UTF8 output is required
 +      if ((t == Latin1ID3V2)&&(rccTaglibPatchGetID3Type() == UTF8)) {

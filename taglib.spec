@@ -1,5 +1,5 @@
 
-%bcond_with tests
+#bcond_without tests
 #bcond_without doc
 %global apidocdir __api-doc_fedora
 
