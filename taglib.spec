@@ -6,7 +6,7 @@
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.9.1
-Release:    1%{?dist}
+Release:    2%{?dist}
 
 License:    LGPLv2 and MPL
 #URL:       http://launchpad.net/taglib
@@ -25,6 +25,10 @@ Patch1:     taglib-1.5b1-multilib.patch
 # try 2, kiss omit -L%_libdir
 Patch2:     taglib-1.5rc1-multilib.patch
 Patch100:     taglib-1.9.1-ds-rusxmms-r9.patch
+
+## upstream patches
+Patch1002: 0002-Fixed-ABI-breakage-in-TagLib-String.patch
+Patch1003: 0003-Rewrote-ByteVector-replace-simpler.patch
 
 BuildRequires: cmake
 BuildRequires: pkgconfig
@@ -67,6 +71,9 @@ Files needed when building software with %{name}.
 ## omit for now
 %patch2 -p1 -b .multilib
 %patch100 -p1
+
+%patch1002 -p1 -b .0002
+%patch1003 -p1 -b .0003
 
 
 %build
@@ -131,9 +138,11 @@ make check -C %{_target_platform}
 
 
 %changelog
-* Fri Nov  8 2013 Ivan Romanov <drizt@land.ru> - 1.9.1-1.R
+* Wed Nov 27 2013 Ivan Romanov <drizt@land.ru> - 1.9.1-2.R
 - applyed russxmms patch
-- disabled tests
+
+* Tue Nov 26 2013 Rex Dieter <rdieter@fedoraproject.org> 1.9.1-2
+- backport fixes for ABI breakage (wrt taglib-1.8) (#1026080, #1027164)
 
 * Tue Oct 08 2013 Rex Dieter <rdieter@fedoraproject.org> 1.9.1-1
 - taglib-1.9.1
