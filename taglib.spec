@@ -6,9 +6,9 @@
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.9.1
-Release:    2%{?dist}
+Release:    3%{?dist}
 
-License:    LGPLv2 and MPL
+License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
 URL:        http://taglib.github.com/
 %if 0%{?snap:1}
@@ -138,8 +138,11 @@ make check -C %{_target_platform}
 
 
 %changelog
-* Wed Nov 27 2013 Ivan Romanov <drizt@land.ru> - 1.9.1-2.R
+* Sat Apr 26 2014 Ivan Romanov <drizt@land.ru> - 1.9.1-3.R
 - applyed russxmms patch
+
+* Fri Apr 25 2014 Rex Dieter <rdieter@fedoraproject.org> 1.9.1-3
+- License: GPLv2 or MPLv1.1 (#1091089)
 
 * Tue Nov 26 2013 Rex Dieter <rdieter@fedoraproject.org> 1.9.1-2
 - backport fixes for ABI breakage (wrt taglib-1.8) (#1026080, #1027164)
