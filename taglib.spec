@@ -1,12 +1,12 @@
 
-#bcond_without tests
+%bcond_without tests
 #bcond_without doc
 %global apidocdir __api-doc_fedora
 
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.9.1
-Release:    3%{?dist}
+Release:    6%{?dist}
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
@@ -29,6 +29,9 @@ Patch100:     taglib-1.9.1-ds-rusxmms-r9.patch
 ## upstream patches
 Patch1002: 0002-Fixed-ABI-breakage-in-TagLib-String.patch
 Patch1003: 0003-Rewrote-ByteVector-replace-simpler.patch
+# https://github.com/taglib/taglib/issues/384
+Patch1004: 0001-Fixed-a-wrong-byte-order-handling-on-big-endian-mach.patch
+Patch1005: 0001-Added-some-missing-deletes-to-test_flac.cpp.patch
 
 BuildRequires: cmake
 BuildRequires: pkgconfig
@@ -74,6 +77,8 @@ Files needed when building software with %{name}.
 
 %patch1002 -p1 -b .0002
 %patch1003 -p1 -b .0003
+%patch1004 -p1 -b .bigendian
+%patch1005 -p1 -b .delete
 
 
 %build
@@ -138,8 +143,17 @@ make check -C %{_target_platform}
 
 
 %changelog
-* Sat Apr 26 2014 Ivan Romanov <drizt@land.ru> - 1.9.1-3.R
+* Mon Jun  9 2014 Ivan Romanov <drizt@land.ru> - 1.9.1-6.R
 - applyed russxmms patch
+
+* Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Thu May 15 2014 Dan Horák <dan[at]danny.cz> 1.9.1-5
+- big endian fixes (#1097109)
+
+* Tue May 06 2014 Rex Dieter <rdieter@fedoraproject.org> 1.9.1-4
+- enable tests (#1094759)
 
 * Fri Apr 25 2014 Rex Dieter <rdieter@fedoraproject.org> 1.9.1-3
 - License: GPLv2 or MPLv1.1 (#1091089)
