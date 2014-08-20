@@ -6,7 +6,7 @@
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.9.1
-Release:    6%{?dist}
+Release:    7%{?dist}
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
@@ -24,7 +24,7 @@ Source1:    taglib-snapshot.sh
 Patch1:     taglib-1.5b1-multilib.patch 
 # try 2, kiss omit -L%_libdir
 Patch2:     taglib-1.5rc1-multilib.patch
-Patch100:     taglib-1.9.1-ds-rusxmms-r9.patch
+Patch100:   taglib-1.9.1-ds-rusxmms-r9.patch
 
 ## upstream patches
 Patch1002: 0002-Fixed-ABI-breakage-in-TagLib-String.patch
@@ -73,6 +73,7 @@ Files needed when building software with %{name}.
 # patch1 not applied
 ## omit for now
 %patch2 -p1 -b .multilib
+
 %patch100 -p1
 
 %patch1002 -p1 -b .0002
@@ -143,8 +144,11 @@ make check -C %{_target_platform}
 
 
 %changelog
-* Mon Jun  9 2014 Ivan Romanov <drizt@land.ru> - 1.9.1-6.R
+* Wed Aug 20 2014 Ivan Romanov <drizt@land.ru> - 1.9.1-7.R
 - applyed russxmms patch
+
+* Mon Aug 18 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
 * Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.1-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
