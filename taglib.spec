@@ -25,7 +25,7 @@ Source1:    taglib-snapshot.sh
 Patch1:     taglib-1.5b1-multilib.patch 
 # try 2, kiss omit -L%_libdir
 Patch2:     taglib-1.5rc1-multilib.patch
-Patch100:   taglib-1.9.1-ds-rusxmms-r9.patch
+Patch100:   taglib-1.10-ds-rusxmms.patch
 
 ## upstream patches
 
