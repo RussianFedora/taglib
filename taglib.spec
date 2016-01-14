@@ -2,11 +2,12 @@
 %bcond_without tests
 #bcond_without doc
 %global apidocdir __api-doc_fedora
+%global beta beta
 
 Name:       taglib	
 Summary:    Audio Meta-Data Library
-Version:    1.9.1
-Release:    10%{?dist}
+Version:    1.10
+Release:    0.1.%{beta}%{?dist}
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
@@ -14,7 +15,7 @@ URL:        http://taglib.github.com/
 %if 0%{?snap:1}
 Source0:    taglib-%{version}-%{snap}.tar.gz
 %else
-Source0:    http://taglib.github.io/releases/taglib-%{version}.tar.gz
+Source0:    http://taglib.github.io/releases/taglib-%{version}%{?beta}.tar.gz
 %endif
 # The snapshot tarballs generated with the following script:
 Source1:    taglib-snapshot.sh
@@ -27,11 +28,6 @@ Patch2:     taglib-1.5rc1-multilib.patch
 Patch100:   taglib-1.9.1-ds-rusxmms-r9.patch
 
 ## upstream patches
-Patch1002: 0002-Fixed-ABI-breakage-in-TagLib-String.patch
-Patch1003: 0003-Rewrote-ByteVector-replace-simpler.patch
-# https://github.com/taglib/taglib/issues/384
-Patch1004: 0001-Fixed-a-wrong-byte-order-handling-on-big-endian-mach.patch
-Patch1005: 0001-Added-some-missing-deletes-to-test_flac.cpp.patch
 
 BuildRequires: cmake
 BuildRequires: pkgconfig
@@ -68,7 +64,7 @@ Files needed when building software with %{name}.
 
 
 %prep
-%setup -q -n taglib-%{version}%{?pre}
+%setup -q -n taglib-%{version}%{?beta}
 
 # patch1 not applied
 ## omit for now
@@ -76,18 +72,12 @@ Files needed when building software with %{name}.
 
 %patch100 -p1
 
-%patch1002 -p1 -b .0002
-%patch1003 -p1 -b .0003
-%patch1004 -p1 -b .bigendian
-%patch1005 -p1 -b .delete
-
 
 %build
-mkdir -p %{_target_platform}
+mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake} \
-  %{?with_tests:-DBUILD_TESTS:BOOL=ON} \
-  ..
+%{cmake} .. \
+  %{?with_tests:-DBUILD_TESTS:BOOL=ON}
 popd
 
 make %{?_smp_mflags} -C %{_target_platform}
@@ -109,9 +99,9 @@ find %{apidocdir} -name '*.md5' | xargs rm -fv
 
 
 %check
-export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
-test "$(pkg-config --modversion taglib)" = "%{version}"
-test "$(pkg-config --modversion taglib_c)" = "%{version}"
+export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
+test "$(pkg-config --modversion taglib)" = "%{version}.0"
+test "$(pkg-config --modversion taglib_c)" = "%{version}.0"
 %if %{with tests}
 #ln -s ../../tests/data %{_target_platform}/tests/
 #LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH \
@@ -144,6 +134,9 @@ make check -C %{_target_platform}
 
 
 %changelog
+* Tue Aug 25 2015 Rex Dieter <rdieter@fedoraproject.org> 1.10-0.1.beta.R
+- taglib-1.10beta
+
 * Fri Oct 30 2015 Arkady L. Shane <ashejn@russianfedora.pro> - 1.9.1-10.R
 - bump release to sync with upstream
 
