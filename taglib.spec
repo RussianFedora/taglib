@@ -134,7 +134,7 @@ make check -C %{_target_platform}
 
 
 %changelog
-* Tue Aug 25 2015 Rex Dieter <rdieter@fedoraproject.org> 1.10-0.1.beta.R
+* Thu Jan 14 2016 Rex Dieter <rdieter@fedoraproject.org> 1.10-0.1.beta.R
 - taglib-1.10beta
 
 * Fri Oct 30 2015 Arkady L. Shane <ashejn@russianfedora.pro> - 1.9.1-10.R
