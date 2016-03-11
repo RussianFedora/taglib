@@ -2,16 +2,15 @@
 %bcond_without tests
 #bcond_without doc
 %global apidocdir __api-doc_fedora
-%global beta beta
 
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.10
-Release:    0.1.%{beta}%{?dist}
+Release:    1%{?dist}
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
-URL:        http://taglib.github.com/
+URL:        http://taglib.github.io/
 %if 0%{?snap:1}
 Source0:    taglib-%{version}-%{snap}.tar.gz
 %else
@@ -25,7 +24,8 @@ Source1:    taglib-snapshot.sh
 Patch1:     taglib-1.5b1-multilib.patch 
 # try 2, kiss omit -L%_libdir
 Patch2:     taglib-1.5rc1-multilib.patch
-Patch100:   taglib-1.10-ds-rusxmms.patch
+
+patch100:     taglib-1.10-ds-rusxmms.patch
 
 ## upstream patches
 
@@ -69,15 +69,14 @@ Files needed when building software with %{name}.
 # patch1 not applied
 ## omit for now
 %patch2 -p1 -b .multilib
-
-%patch100 -p1
-
+%patch100 -p1 -b .xmms
 
 %build
 mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake} .. \
-  %{?with_tests:-DBUILD_TESTS:BOOL=ON}
+  %{?with_tests:-DBUILD_TESTS:BOOL=ON} \
+  -DCMAKE_BUILD_TYPE:STRING="Release"
 popd
 
 make %{?_smp_mflags} -C %{_target_platform}
@@ -100,8 +99,8 @@ find %{apidocdir} -name '*.md5' | xargs rm -fv
 
 %check
 export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
-test "$(pkg-config --modversion taglib)" = "%{version}.0"
-test "$(pkg-config --modversion taglib_c)" = "%{version}.0"
+test "$(pkg-config --modversion taglib)" = "%{version}"
+test "$(pkg-config --modversion taglib_c)" = "%{version}"
 %if %{with tests}
 #ln -s ../../tests/data %{_target_platform}/tests/
 #LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH \
@@ -114,7 +113,7 @@ make check -C %{_target_platform}
 
 %files
 %doc AUTHORS NEWS
-%doc COPYING.LGPL COPYING.MPL
+%license COPYING.LGPL COPYING.MPL
 %{_libdir}/libtag.so.1*
 %{_libdir}/libtag_c.so.0*
 
@@ -134,14 +133,23 @@ make check -C %{_target_platform}
 
 
 %changelog
-* Thu Jan 14 2016 Rex Dieter <rdieter@fedoraproject.org> 1.10-0.1.beta.R
+* Fri Mar 11 2016 Arkady L. Shane <ashejn@russianfedora.pro> 1.10-1.R
+- apply xmms patch
+
+* Sat Jan 30 2016 Rex Dieter <rdieter@fedoraproject.org> 1.10-1
+- taglib-1.10 (#1301895)
+
+* Tue Aug 25 2015 Rex Dieter <rdieter@fedoraproject.org> 1.10-0.1.beta
 - taglib-1.10beta
 
-* Fri Oct 30 2015 Arkady L. Shane <ashejn@russianfedora.pro> - 1.9.1-10.R
-- bump release to sync with upstream
+* Fri Jun 19 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.1-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
-* Wed Aug 20 2014 Ivan Romanov <drizt@land.ru> - 1.9.1-7.R
-- applyed russxmms patch
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 1.9.1-9
+- Rebuilt for GCC 5 C++11 ABI change
+
+* Sat Mar 21 2015 Rex Dieter <rdieter@fedoraproject.org> 1.9.1-8
+- gcc5 rebuild (#1204372)
 
 * Mon Aug 18 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.1-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
