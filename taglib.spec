@@ -25,7 +25,7 @@ Patch1:     taglib-1.5b1-multilib.patch
 # try 2, kiss omit -L%_libdir
 Patch2:     taglib-1.5rc1-multilib.patch
 
-patch100:     taglib-1.10-ds-rusxmms.patch
+patch100:   taglib-1.10-ds-rusxmms.patch
 
 ## upstream patches
 
