@@ -1,12 +1,13 @@
 
-%bcond_without tests
+## 1.11 currently disables tests with BUILD_SHARED_LIBS=ON
+#bcond_without tests
 #bcond_without doc
 %global apidocdir __api-doc_fedora
 
 Name:       taglib	
 Summary:    Audio Meta-Data Library
-Version:    1.10
-Release:    1%{?dist}
+Version:    1.11
+Release:    1%{?dist}.R
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
@@ -20,12 +21,11 @@ Source0:    http://taglib.github.io/releases/taglib-%{version}%{?beta}.tar.gz
 Source1:    taglib-snapshot.sh
 
 # http://bugzilla.redhat.com/343241
-# try 1, use pkg-config
-Patch1:     taglib-1.5b1-multilib.patch 
-# try 2, kiss omit -L%_libdir
 Patch2:     taglib-1.5rc1-multilib.patch
 
-patch100:   taglib-1.10-ds-rusxmms.patch
+# RussXMMS patch
+# http://darksoft.borda.ru/?1-1-0-00000124-000-0-0-1462133488
+Patch10:    taglib-1.11-ds-rusxmms.patch
 
 ## upstream patches
 
@@ -39,7 +39,6 @@ BuildRequires: cppunit-devel
 BuildRequires: doxygen
 BuildRequires: graphviz
 %endif
-BuildRequires: librcc-devel
 
 %description
 TagLib is a library for reading and editing the meta-data of several
@@ -69,13 +68,17 @@ Files needed when building software with %{name}.
 # patch1 not applied
 ## omit for now
 %patch2 -p1 -b .multilib
-%patch100 -p1 -b .xmms
+
+# RusXMMS
+%patch10 -p1 -b .ds-rusxmms
 
 %build
 mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake} .. \
-  %{?with_tests:-DBUILD_TESTS:BOOL=ON} \
+%if %{with tests}
+  -DBUILD_TESTS:BOOL=ON \
+%endif
   -DCMAKE_BUILD_TYPE:STRING="Release"
 popd
 
@@ -133,8 +136,23 @@ make check -C %{_target_platform}
 
 
 %changelog
-* Fri Mar 11 2016 Arkady L. Shane <ashejn@russianfedora.pro> 1.10-1.R
-- apply xmms patch
+* Thu Jun 23 2016 Arkady L. Shane <ashejn@russianfedora.pro> 1.11-1.R
+- rebuilt with RusXMMS patches
+
+* Fri Apr 29 2016 Rex Dieter <rdieter@fedoraproject.org> 1.11-1
+- taglib-1.11
+
+* Wed Mar 02 2016 Rex Dieter <rdieter@fedoraproject.org> 1.11-0.3.beta2
+- taglib-1.11beta2
+
+* Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.11-0.2.beta
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Sat Jan 30 2016 Rex Dieter <rdieter@fedoraproject.org> 1.11-0.1.beta
+- taglib-1.11beta
+
+* Sat Jan 30 2016 Rex Dieter <rdieter@fedoraproject.org> 1.10-2
+- disable regression tests on rawhide (FTBFS)
 
 * Sat Jan 30 2016 Rex Dieter <rdieter@fedoraproject.org> 1.10-1
 - taglib-1.10 (#1301895)
