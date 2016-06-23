@@ -32,6 +32,7 @@ Patch10:    taglib-1.11-ds-rusxmms.patch
 BuildRequires: cmake
 BuildRequires: pkgconfig
 BuildRequires: zlib-devel
+BuildRequires: librcc-devel
 %if %{with tests}
 BuildRequires: cppunit-devel
 %endif
