@@ -7,7 +7,7 @@
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.11
-Release:    1%{?dist}.R
+Release:    1%{?dist}
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
