@@ -6,8 +6,8 @@
 
 Name:       taglib	
 Summary:    Audio Meta-Data Library
-Version:    1.11
-Release:    1%{?dist}.R
+Version:    1.11.1
+Release:    2%{?dist}.R
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
@@ -137,6 +137,9 @@ make check -C %{_target_platform}
 
 
 %changelog
+* Sun Mar 19 2017 Arkady L. Shane <ashejn@russianfedora.pro> 1.11-2.R
+- update to 1.11.1
+
 * Thu Jun 23 2016 Arkady L. Shane <ashejn@russianfedora.pro> 1.11-1.R
 - rebuilt with RusXMMS patches
 
