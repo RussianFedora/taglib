@@ -7,7 +7,7 @@
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.11.1
-Release:    2%{?dist}.R
+Release:    5%{?dist}.R
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
@@ -21,13 +21,17 @@ Source0:    http://taglib.github.io/releases/taglib-%{version}%{?beta}.tar.gz
 Source1:    taglib-snapshot.sh
 
 # http://bugzilla.redhat.com/343241
-Patch2:     taglib-1.5rc1-multilib.patch
+Patch102:     taglib-1.5rc1-multilib.patch
 
 # RussXMMS patch
 # http://darksoft.borda.ru/?1-1-0-00000124-000-0-0-1462133488
 Patch10:    taglib-1.11-ds-rusxmms.patch
 
 ## upstream patches
+## upstream patches
+# sbooth fork/pull-request
+# https://github.com/taglib/taglib/pull/831/commits/eb9ded1206f18f2c319157337edea2533a40bea6
+Patch1: 0001-Don-t-assume-TDRC-is-an-instance-of-TextIdentificati.patch
 
 BuildRequires: cmake
 BuildRequires: pkgconfig
@@ -64,14 +68,7 @@ Files needed when building software with %{name}.
 
 
 %prep
-%setup -q -n taglib-%{version}%{?beta}
-
-# patch1 not applied
-## omit for now
-%patch2 -p1 -b .multilib
-
-# RusXMMS
-%patch10 -p1 -b .ds-rusxmms
+%autosetup -n taglib-%{version}%{?beta} -p1
 
 %build
 mkdir %{_target_platform}
@@ -137,6 +134,9 @@ make check -C %{_target_platform}
 
 
 %changelog
+* Tue Aug 22 2017 Rex Dieter <rdieter@fedoraproject.org> - 1.11.1-5.R
+- CVE-2017-12678 taglib: Incorrect cast in rebuildAggregateFrames function (#1483960,#1483959)
+
 * Sun Mar 19 2017 Arkady L. Shane <ashejn@russianfedora.pro> 1.11-2.R
 - update to 1.11.1
 
