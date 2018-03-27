@@ -7,7 +7,7 @@
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.11.1
-Release:    5%{?dist}.R
+Release:    7%{?dist}.R
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
@@ -108,9 +108,7 @@ test "$(pkg-config --modversion taglib_c)" = "%{version}"
 make check -C %{_target_platform}
 %endif
 
-
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 %files
 %doc AUTHORS NEWS
@@ -134,6 +132,12 @@ make check -C %{_target_platform}
 
 
 %changelog
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.11.1-7.R
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Sat Feb 03 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.11.1-6.R
+- Switch to %%ldconfig_scriptlet
+
 * Tue Aug 22 2017 Rex Dieter <rdieter@fedoraproject.org> - 1.11.1-5.R
 - CVE-2017-12678 taglib: Incorrect cast in rebuildAggregateFrames function (#1483960,#1483959)
 
