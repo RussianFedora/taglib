@@ -7,7 +7,7 @@
 Name:       taglib	
 Summary:    Audio Meta-Data Library
 Version:    1.11.1
-Release:    7%{?dist}.R
+Release:    9%{?dist}.R
 
 License:    LGPLv2 or MPLv1.1
 #URL:       http://launchpad.net/taglib
@@ -33,6 +33,8 @@ Patch10:    taglib-1.11-ds-rusxmms.patch
 # https://github.com/taglib/taglib/pull/831/commits/eb9ded1206f18f2c319157337edea2533a40bea6
 Patch1: 0001-Don-t-assume-TDRC-is-an-instance-of-TextIdentificati.patch
 
+BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: cmake
 BuildRequires: pkgconfig
 BuildRequires: zlib-devel
@@ -80,7 +82,7 @@ pushd %{_target_platform}
   -DCMAKE_BUILD_TYPE:STRING="Release"
 popd
 
-make %{?_smp_mflags} -C %{_target_platform}
+%make_build -C %{_target_platform}
 
 %if %{with doc}
 make docs -C %{_target_platform}
@@ -132,6 +134,12 @@ make check -C %{_target_platform}
 
 
 %changelog
+* Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.11.1-9.R
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Tue May 08 2018 Rex Dieter <rdieter@fedoraproject.org> - 1.11.1-8.R
+- use %%make_build
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.11.1-7.R
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
